@@ -1,0 +1,12 @@
+title Exercise 0.6
+
+browser->server: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+note over browser:
+When the form is submitted, the browser used prevent.Default to prevent the default handling of the form. 
+After that, it created a new note with the message and re-rendered the html page.
+The browser sent a POST request to new_note_spa. The message and the timestamp were sent to the server as JSON data.
+end note 
+note over server:
+The server responded that the data had been modified successfully with the code 201.
+
+
