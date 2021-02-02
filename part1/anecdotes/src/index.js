@@ -21,7 +21,7 @@ function App({anecdotes}) {
   const [selected, setSelected] = useState(0)
   const [points, setPoint] = useState(new Array(anecdotes.length).fill(0))
   const [maxIndex, setMaxIndex] = useState(0)
-
+  console.log("The state in the beginning", points)
   const randomAnec = () => {
     // find a new random index for the next anecdote
 
@@ -40,10 +40,11 @@ function App({anecdotes}) {
   }
 
   const vote = () => {
-    // increase the point for the current anecdote: points[selected] is increased by 1
+    // increase the point for the current anecdote: points[selected] is increased by 1 and update the maxIndex
     const copy = [...points]
     copy[selected] += 1
     setPoint(copy)
+    console.log(points);
     if (copy[selected] > copy[maxIndex]) {
       setMaxIndex(selected)
     }
