@@ -5,13 +5,13 @@ import Persons from "./components/Persons"
 import personService from "./services/persons"
 import "./App.css"
 
-const Notification = ({ message }) => {
+const Notification = ({ message, style }) => {
   if (message === null) {
     return null
   }
 
   return (
-    <div className="notification">
+    <div className="notification" style={style}>
       {message}
     </div>
   )
@@ -21,7 +21,25 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterWord, setFilterWord] = useState('')
-  const [message, setMessage] = useState(null)
+  const successfulStyle = {
+    borderRadius: "10px",
+    padding: "0.5rem",
+    border: "1px solid green",
+    fontFamily: "Arial, Helvetica, sans-serif",
+    color: "green",
+    backgroundColor: "antiquewhite",
+    marginBottom: "1rem"
+  }
+  const failureStyle = {
+    borderRadius: "10px",
+    padding: "0.5rem",
+    border: "1px solid red",
+    fontFamily: "Arial, Helvetica, sans-serif",
+    color: "red",
+    backgroundColor: "antiquewhite",
+    marginBottom: "1rem"
+  }
+  const [notification, setNotification] = useState({ message: null, style: successfulStyle })
 
   const hook = () => {
     personService.getAll()
@@ -50,8 +68,17 @@ const App = () => {
           .update(id, personObject)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
-            setMessage("Updated " + returnedPerson.name)
-            setTimeout(() => { setMessage(null) }, 1000)
+            setNotification({ message: "Updated " + returnedPerson.name, style: successfulStyle })
+
+            setTimeout(() => { setNotification({ message: null, style: successfulStyle }) }, 3000)
+          })
+          .catch(error => {
+            setNotification({
+              message: "Information of " + newName + " has already been removed from the server.",
+              style: failureStyle
+            })
+            setPersons(persons.filter(person => person.id !== id))
+            setTimeout(() => { setNotification({ message: null, style: successfulStyle }) }, 3000)
           })
       }
     } else {
@@ -60,8 +87,8 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewNumber("")
-          setMessage("Added " + returnedPerson.name)
-          setTimeout(() => { setMessage(null) }, 1000)
+          setNotification({ message: "Added " + returnedPerson.name, style: successfulStyle })
+          setTimeout(() => { setNotification({ message: null, style: successfulStyle }) }, 3000)
         })
     }
 
@@ -78,8 +105,13 @@ const App = () => {
     personService.deletePerson(props.id)
       .then(response => {
         setPersons(persons.filter(person => person.id !== props.id))
-        setMessage("Deleted " + props.name)
-        setTimeout(() => { setMessage(null) }, 1000)
+        setNotification({ message: "Deleted " + props.name, style: successfulStyle })
+        setTimeout(() => { setNotification({ message: null, style: successfulStyle }) }, 3000)
+      })
+      .catch(error => {
+        setNotification({ message: "Information of " + props.name + " has already been removed from the server.", style: failureStyle })
+        setPersons(persons.filter(person => person.id !== props.id))
+        setTimeout(() => { setNotification({ message: null, style: failureStyle }) }, 3000)
       })
   }
 
@@ -104,7 +136,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={message} />
+      <Notification message={notification.message} style={notification.style} />
       <Filter filterWord={filterWord} handleFilter={handleFilter} />
       <h3>add a new</h3>
       <PersonForm
