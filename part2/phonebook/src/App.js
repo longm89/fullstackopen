@@ -2,13 +2,26 @@ import React, { useEffect, useState } from 'react'
 import Filter from "./components/Filter"
 import PersonForm from "./components/PersonForm"
 import Persons from "./components/Persons"
-import axios from "axios"
 import personService from "./services/persons"
+import "./App.css"
+
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className="notification">
+      {message}
+    </div>
+  )
+}
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterWord, setFilterWord] = useState('')
+  const [message, setMessage] = useState(null)
 
   const hook = () => {
     personService.getAll()
@@ -30,13 +43,15 @@ const App = () => {
     const isEqual = (element) => element.name === newName
     const indexFound = persons.findIndex(isEqual)
     if (indexFound !== -1) {
-      const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      const result = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one ? `)
       if (result) {
         let id = persons[indexFound].id
         personService
           .update(id, personObject)
           .then(returnedPerson => {
             setPersons(persons.map(person => person.id !== id ? person : returnedPerson))
+            setMessage("Updated " + returnedPerson.name)
+            setTimeout(() => { setMessage(null) }, 1000)
           })
       }
     } else {
@@ -45,6 +60,8 @@ const App = () => {
           setPersons(persons.concat(returnedPerson))
           setNewName("")
           setNewNumber("")
+          setMessage("Added " + returnedPerson.name)
+          setTimeout(() => { setMessage(null) }, 1000)
         })
     }
 
@@ -61,6 +78,8 @@ const App = () => {
     personService.deletePerson(props.id)
       .then(response => {
         setPersons(persons.filter(person => person.id !== props.id))
+        setMessage("Deleted " + props.name)
+        setTimeout(() => { setMessage(null) }, 1000)
       })
   }
 
@@ -85,6 +104,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} />
       <Filter filterWord={filterWord} handleFilter={handleFilter} />
       <h3>add a new</h3>
       <PersonForm
