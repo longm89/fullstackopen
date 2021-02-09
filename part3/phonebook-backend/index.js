@@ -1,5 +1,8 @@
 const express = require("express")
 const app = express()
+var morgan = require("morgan")
+morgan.token("data", function (req, res) { return JSON.stringify(req.body) })
+app.use(morgan(`:method :url :status :res[content-length] - :response-time ms :data`))
 app.use(express.json())
 let persons = [
     {
@@ -80,7 +83,6 @@ app.post("/api/persons", (request, response) => {
 
     do {
         newId = getRandomInt(10000000)
-        console.log(newId)
     }
     while (listOfId.indexOf(newId) !== -1)
 
