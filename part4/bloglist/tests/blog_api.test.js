@@ -49,7 +49,8 @@ test('a valid blog can be added', async () => {
 
   expect(response.body).toContainEqual(newBlog)
 })
-describe('deletion of a note', () => {
+
+describe('deletion of a blog', () => {
   test('succeeds with status code 204 if id is valid', async () => {
     const response = await Blog.find({})
     const blogsAtStart = response.map(blog => blog.toJSON())
@@ -64,6 +65,23 @@ describe('deletion of a note', () => {
     expect(blogsAtEnd).not.toContainEqual(blogToDelete)
   })
 })
+
+describe('update a blog post', () => {
+  test('succeeds if able to update a blog', async () => {
+    const response = await Blog.find({})
+    const blogsAtStart = response.map(blog => blog.toJSON())
+    let blogToUpdate = blogsAtStart[blogsAtStart.length - 1]
+    blogToUpdate["likes"] = 6
+    await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+      .expect(200)
+    const response2 = await Blog.find({})
+    const blogsAtEnd = response2.map(blog => blog.toJSON())
+    expect(blogsAtEnd).toContainEqual(blogToUpdate)
+  })
+})
+
 afterAll(() => {
   mongoose.connection.close()
 })
