@@ -49,7 +49,21 @@ test('a valid blog can be added', async () => {
 
   expect(response.body).toContainEqual(newBlog)
 })
+describe('deletion of a note', () => {
+  test('succeeds with status code 204 if id is valid', async () => {
+    const response = await Blog.find({})
+    const blogsAtStart = response.map(blog => blog.toJSON())
+    const blogToDelete = blogsAtStart[0]
 
+    await api
+      .delete(`/api/blogs/${blogToDelete.id}`)
+      .expect(204)
+    const response2 = await Blog.find({})
+    const blogsAtEnd = response2.map(blog => blog.toJSON())
+    expect(blogsAtEnd).toHaveLength(blogsAtStart.length - 1)
+    expect(blogsAtEnd).not.toContainEqual(blogToDelete)
+  })
+})
 afterAll(() => {
   mongoose.connection.close()
 })
