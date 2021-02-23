@@ -34,7 +34,7 @@ test('a valid blog can be added', async () => {
     "title": "a new post",
     "author": "David",
     "url": "sdfdsfsd",
-    "likes": "12"
+    "likes": 12
   }
 
   await api
@@ -45,6 +45,9 @@ test('a valid blog can be added', async () => {
     
   const response = await api.get('/api/blogs')
   expect(response.body).toHaveLength(initialBlogs.length + 1)
+  newBlog['id'] = response.body[initialBlogs.length]['id']
+
+  expect(response.body).toContainEqual(newBlog)
 })
 
 afterAll(() => {
