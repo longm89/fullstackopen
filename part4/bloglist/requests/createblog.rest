@@ -2,8 +2,9 @@ POST http://localhost:3001/api/blogs
 Content-Type: application/json
 
 {
-  "title": "a second post",
+  "title": "Life is beautiful",
   "author": "Long Mai",
-  "url": "sdf",
-  "likes": "4"
+  "url": "sdsdff",
+  "likes": "24",
+  "userId":"603633612856cc1038a6715f"
 }
