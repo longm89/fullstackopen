@@ -1,10 +1,10 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImxvbmdtODkiLCJpZCI6IjYwMzYzMzYxMjg1NmNjMTAzOGE2NzE1ZiIsImlhdCI6MTYxNDE3NTIzNn0.Z1A0wkW25UrPEEWgdZKJV8Z_h-m2ZTz1LN5kogtxElM
 
 {
-  "title": "Life is beautiful",
+  "title": "Linh tinh it thoi",
   "author": "Long Mai",
   "url": "sdsdff",
-  "likes": "24",
-  "userId":"603633612856cc1038a6715f"
+  "likes": "24"
 }
