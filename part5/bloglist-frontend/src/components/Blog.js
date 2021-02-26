@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-const Blog = ({ blog, name }) => {
+const Blog = (props) => {
   const [view, setView] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -8,15 +8,27 @@ const Blog = ({ blog, name }) => {
     borderWidth: 1,
     marginBottom: 5
   }
+  const handleDelete = () => {
+    const result = window.confirm(`Remove blog ${props.blog.title} by ${props.blog.author} ? `)
+    if (result) {
+      props.deleteBlog(props.blog)
+    }
+  }
   return (
     <div style = {blogStyle}>
-      {blog.title} by {blog.author} {' '}
+      {props.blog.title} by {props.blog.author} {' '}
       <button onClick = {() => setView(!view)}>{view ? 'hide' : 'view'}</button>
       {view ?
         <div>
-          <div>{blog.url} </div>
-          <div>{blog.likes} {' '} <button>like</button> </div>
-          {name}
+          <div>{props.blog.url} </div>
+          <div>{props.blog.likes} {' '} <button onClick = {() => props.addLike(props.blog)}>like</button> </div>
+          {props.blog.user.name}
+          {props.username === props.blog.user.username ?
+            <div>
+              <button onClick = {handleDelete}>Remove</button>
+            </div>
+            : null
+          }
         </div>
         : null
       }
