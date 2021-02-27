@@ -19,13 +19,13 @@ const App = () => {
   const createNewBlog = async (newBlog) => {
     blogFormRef.current.toggleVisibility()
     const savedBlog = await blogService.create(newBlog)
-    setBlogs(blogs.concat(savedBlog).sort((blog1,blog2) => blog1.likes-blog2.likes))
+    setBlogs(blogs.concat(savedBlog).sort((blog1,blog2) => blog2.likes-blog1.likes))
     setBlogMessage(`a new blog ${newBlog.title} by ${newBlog.author} added`)
     setTimeout(() => setBlogMessage(null), 5000)
   }
 
   const blogForm = () => (
-    <Togglable buttonLabel = 'new note' ref = {blogFormRef}>
+    <Togglable buttonLabel = 'new blog' ref = {blogFormRef}>
       <h1>create new</h1>
       <BlogForm
         createNewBlog = {createNewBlog}
@@ -37,7 +37,7 @@ const App = () => {
 
 
   useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs.sort((blog1,blog2) => blog1.likes-blog2.likes)))
+    blogService.getAll().then((blogs) => setBlogs(blogs.sort((blog1,blog2) => blog2.likes-blog1.likes)))
   }, [])
 
   const handleLogout = () => {
@@ -88,12 +88,12 @@ const App = () => {
     let newBlog = { ...blogToUpdate }
     newBlog.likes += 1
     const updatedBlog = await blogService.update(newBlog)
-    setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog).sort((blog1,blog2) => blog1.likes - blog2.likes))
+    setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog).sort((blog1,blog2) => blog2.likes - blog1.likes))
   }
 
   const deleteBlog = async (blogToDelete) => {
     await blogService.deleteBlog(blogToDelete.id)
-    setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id).sort((blog1,blog2) => blog1.likes - blog2.likes))
+    setBlogs(blogs.filter(blog => blog.id !== blogToDelete.id).sort((blog1,blog2) => blog2.likes - blog1.likes))
   }
   return (
     <div>

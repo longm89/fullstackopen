@@ -18,11 +18,11 @@ const Blog = (props) => {
   return (
     <div style = {blogStyle}>
       {props.blog.title} by {props.blog.author} {' '}
-      <button onClick = {() => setView(!view)}>{view ? 'hide' : 'view'}</button>
+      <button onClick = {() => setView(!view)} className = 'view'>{view ? 'hide' : 'view'}</button>
       {view ?
         <div>
           <div>{props.blog.url} </div>
-          <div>{props.blog.likes} {' '} <button onClick = {() => props.addLike(props.blog)}>like</button> </div>
+          <div ><span className = 'numLikes'>{props.blog.likes}</span>{' '} <button id = 'clickLike' onClick = {() => props.addLike(props.blog)}>like</button> </div>
           {props.blog.user.name}
           {props.username === props.blog.user.username ?
             <div>
