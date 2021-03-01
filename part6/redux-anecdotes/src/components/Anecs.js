@@ -2,6 +2,7 @@ import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {upVoteOf} from '../reducers/anecdoteReducer'
 import {newMessage, removeMessage} from '../reducers/messageReducer'
+import anecService from '../services/anecdotes'
 const Anec = ({anecdote, handleClick}) => {
   return (
     <div key={anecdote.id}>
@@ -28,18 +29,22 @@ const Anecs = () => {
     console.log(filteredAnecdotes)
     return filteredAnecdotes.sort((anec1, anec2) => anec2.votes - anec1.votes)
   })
+  
   const dispatch = useDispatch()
+
+  const handleUpVote = (anecdote) => {
+    dispatch(upVoteOf(anecdote.id))
+    anecService.update({...anecdote, votes: anecdote.votes + 1})
+    dispatch(newMessage(`you voted '${anecdote.content}'`))
+    setTimeout(() => {dispatch(removeMessage())}, 5000)
+  }
   return (
     <div>
       {anecdotes.map(anecdote =>
         <Anec
         key = {anecdote.id}
         anecdote = {anecdote}
-        handleClick = {() => 
-          {dispatch(upVoteOf(anecdote.id))
-           dispatch(newMessage(`you voted '${anecdote.content}'`))
-           setTimeout(() => {dispatch(removeMessage())}, 5000)
-          }}
+        handleClick = {() => handleUpVote(anecdote)}
         />
       )}
     </div>

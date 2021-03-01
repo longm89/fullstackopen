@@ -2,13 +2,15 @@ import React from 'react'
 import {useDispatch} from 'react-redux'
 import {createNewAnec} from '../reducers/anecdoteReducer'
 import {newMessage, removeMessage} from '../reducers/messageReducer'
+import anecService from '../services/anecdotes'
 const NewAnec = (props) => {
   const dispatch = useDispatch()
-  const addAnecdote = (event) => {
+  const addAnecdote = async (event) => {
     event.preventDefault()
     const anec = event.target.anec.value 
     event.target.anec.value = ''
-    dispatch(createNewAnec(anec))
+    const createdAnec = await anecService.createNew(anec)
+    dispatch(createNewAnec(createdAnec))
     dispatch(newMessage(`you created '${anec}'`))
     setTimeout(() => {dispatch(removeMessage())}, 5000)
   }
