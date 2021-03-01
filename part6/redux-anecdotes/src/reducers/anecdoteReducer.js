@@ -24,7 +24,7 @@ export const createNewAnec = (anec) => {
 }
 const initialState = anecdotesAtStart.map(asObject)
 
-const reducer = (state = initialState, action) => {
+const anecReducer = (state = initialState, action) => {
   
   switch(action.type) {
     case 'vote':
@@ -46,4 +46,4 @@ export const upVoteOf = (id) => {
     data: {id}
   }
 }
-export default reducer
+export default anecReducer
