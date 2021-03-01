@@ -1,8 +1,7 @@
 import React from 'react'
 import {useDispatch, useSelector} from 'react-redux'
 import {upVoteOf} from '../reducers/anecdoteReducer'
-import {newMessage, removeMessage} from '../reducers/messageReducer'
-import anecService from '../services/anecdotes'
+import {setNotification} from '../reducers/messageReducer'
 const Anec = ({anecdote, handleClick}) => {
   return (
     <div key={anecdote.id}>
@@ -33,10 +32,8 @@ const Anecs = () => {
   const dispatch = useDispatch()
 
   const handleUpVote = (anecdote) => {
-    dispatch(upVoteOf(anecdote.id))
-    anecService.update({...anecdote, votes: anecdote.votes + 1})
-    dispatch(newMessage(`you voted '${anecdote.content}'`))
-    setTimeout(() => {dispatch(removeMessage())}, 5000)
+    dispatch(upVoteOf(anecdote))
+    dispatch(setNotification(`you voted '${anecdote.content}'`, 5))
   }
   return (
     <div>

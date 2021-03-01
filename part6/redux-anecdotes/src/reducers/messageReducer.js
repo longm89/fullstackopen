@@ -21,5 +21,10 @@ export const removeMessage = () => {
     type: 'REMOVE_MESSAGE'
   }
 }
-
+export const setNotification = (content, time) => {
+  return async dispatch => {
+    dispatch(newMessage(content))
+    setTimeout(() => {dispatch(removeMessage())}, time * 1000)
+  }
+}
 export default messageReducer 

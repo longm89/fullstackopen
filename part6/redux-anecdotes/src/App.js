@@ -9,7 +9,7 @@ import {useDispatch} from 'react-redux'
 const App = () => {
   const dispatch = useDispatch()
   useEffect(() => {
-    anecService.getAll().then(anecs => dispatch(initializeAnecs(anecs)))
+    dispatch(initializeAnecs())
   }, [dispatch])
   return (  
       <div>
