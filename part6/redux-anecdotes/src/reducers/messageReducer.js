@@ -21,10 +21,19 @@ export const removeMessage = () => {
     type: 'REMOVE_MESSAGE'
   }
 }
+let prevRemoval = null 
 export const setNotification = (content, time) => {
   return async dispatch => {
+    if (prevRemoval !== null) {
+      clearTimeout(prevRemoval)
+    }
+    console.log('value before set new message', prevRemoval)
     dispatch(newMessage(content))
-    setTimeout(() => {dispatch(removeMessage())}, time * 1000)
+    prevRemoval = setTimeout(() => {
+      prevRemoval = null
+      dispatch(removeMessage())
+      
+    }, time * 1000)
   }
 }
 export default messageReducer 

@@ -1,16 +1,16 @@
 import React from 'react'
-import {useDispatch} from 'react-redux'
+import {connect} from 'react-redux'
 import {createNewAnec} from '../reducers/anecdoteReducer'
-import {newMessage, removeMessage, setNotification} from '../reducers/messageReducer'
-import anecService from '../services/anecdotes'
+import {setNotification} from '../reducers/messageReducer'
+
 const NewAnec = (props) => {
-  const dispatch = useDispatch()
+
   const addAnecdote = async (event) => {
     event.preventDefault()
     const anec = event.target.anec.value 
     event.target.anec.value = ''
-    dispatch(createNewAnec(anec))
-    dispatch(setNotification(`you created '${anec}'`, 5))
+    props.createNewAnec(anec)
+    props.setNotification(`you created '${anec}'`, 5)
   }
   return (
     <div>
@@ -23,4 +23,4 @@ const NewAnec = (props) => {
   )
 }
 
-export default NewAnec
+export default connect(null, {createNewAnec, setNotification})(NewAnec)
