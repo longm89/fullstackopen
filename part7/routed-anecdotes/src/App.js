@@ -3,6 +3,7 @@ import {
   BrowserRouter as Router, 
   Switch, Route, Link, useRouteMatch, useHistory
 } from 'react-router-dom'
+import {useField} from './hooks'
 const Menu = () => {
   const padding = {
     paddingRight: 5
@@ -57,17 +58,18 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const [content, setContent] = useState('')
-  const [author, setAuthor] = useState('')
-  const [info, setInfo] = useState('')
+  const {reset: resetContent, ...content} = useField('content')
+  const {reset: resetAuthor, ...author} = useField('author')
+  const {reset: resetInfo, ...info} = useField('info')
+ 
   const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
     props.addNew({
-      content,
-      author,
-      info,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     history.push('/')
@@ -79,17 +81,23 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
+          <input {...content} />
         </div>
         <div>
           author
-          <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
+          <input {...author} />
         </div>
         <div>
           url for more info
-          <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
+          <input {...info} />
         </div>
         <button>create</button>
+        <button onClick = { (event) => {
+            event.preventDefault()
+            resetContent() 
+            resetAuthor() 
+            resetInfo()
+          }} >reset</button>
       </form>
     </div>
   )
@@ -101,7 +109,7 @@ const Anecdote = ({anecdote}) => {
     <div>
       <h2>{anecdote.content}</h2>
       <p>has {anecdote.votes} votes</p>
-      <p>for more info see {anecdote.info}</p>
+      <p>for more info see <a href = {anecdote.info} > {anecdote.info} </a></p>
     </div>
   )
 }
